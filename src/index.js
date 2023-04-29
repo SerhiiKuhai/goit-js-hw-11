@@ -15,15 +15,19 @@ let simpleLightBox;
 searchForm.addEventListener('submit', onFormSearch);
 btnLoadMore.addEventListener('click', onFindMore);
 
-function onFormSearch(evt) {
+async function onFormSearch(evt) {
   evt.preventDefault();
 
   query = evt.currentTarget.searchQuery.value.trim();
 
   divGallery.innerHTML = '';
   btnLoadMore.hidden = true;
-
-  fetchImg(query, page, perPage).then(renderImg).catch(errorFetchImg);
+  try {
+    const data = await fetchImg(query, page, perPage);
+    renderImg(data);
+  } catch (error) {
+    errorFetchImg();
+  }
 }
 
 function renderImg(data) {
@@ -46,9 +50,14 @@ function errorFetchImg() {
   console.log(error);
 }
 
-function onFindMore() {
-  page += 1;
-  fetchImg(query, page, perPage).then(nextRenderImg).catch(errorFetchImg);
+async function onFindMore() {
+  try {
+    page += 1;
+    const data = await fetchImg(query, page, perPage);
+    nextRenderImg(data);
+  } catch (error) {
+    errorFetchImg();
+  }
 }
 
 function nextRenderImg(data) {
