@@ -22,6 +22,7 @@ async function onFormSearch(evt) {
 
   divGallery.innerHTML = '';
   btnLoadMore.hidden = true;
+  page = 1;
   try {
     const data = await fetchImg(query, page, perPage);
     renderImg(data);
@@ -36,6 +37,7 @@ function renderImg(data) {
       'Sorry, there are no images matching your search query. Please try again.'
     );
     divGallery.innerHTML = '';
+    page = 1;
   } else {
     insertImg(data.data.hits);
     simpleLightBoxImg();
